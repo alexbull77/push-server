@@ -4,8 +4,10 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "npx ts-node ./src/server.ts",
-        "gen": "gql.tada generate schema 'https://modern-scheduler-2.hasura.app/v1/graphql' -o ./generated/db.graphql --header \"x-hasura-admin-secret: 15XDSkPMZOqf6OjUlNm8TmCgMxprpqOjGE3AByfRNyPU00D6vczNIEPXa9uEFr09\" && gql-tada generate output"
+        "dev": "npx ts-node ./src/server.ts",
+        "gen": "gql.tada generate schema 'https://modern-scheduler-2.hasura.app/v1/graphql' -o ./generated/db.graphql --header \"x-hasura-admin-secret: 15XDSkPMZOqf6OjUlNm8TmCgMxprpqOjGE3AByfRNyPU00D6vczNIEPXa9uEFr09\" && gql-tada generate output",
+        "build": "tsc",
+        "start": "node dist/server.js"
     },
     "keywords": [],
     "author": "",
