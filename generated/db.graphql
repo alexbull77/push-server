@@ -1,0 +1,1813 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""
+columns and relationships of "event"
+"""
+type event {
+  description: String!
+  end: String!
+  id: uuid!
+
+  """An array relationship"""
+  images(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): [images!]!
+
+  """An aggregate relationship"""
+  images_aggregate(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): images_aggregate!
+  start: String!
+  title: String!
+  user_id: String!
+}
+
+"""
+aggregated selection of "event"
+"""
+type event_aggregate {
+  aggregate: event_aggregate_fields
+  nodes: [event!]!
+}
+
+"""
+aggregate fields of "event"
+"""
+type event_aggregate_fields {
+  count(columns: [event_select_column!], distinct: Boolean): Int!
+  max: event_max_fields
+  min: event_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "event". All fields are combined with a logical 'AND'.
+"""
+input event_bool_exp {
+  _and: [event_bool_exp!]
+  _not: event_bool_exp
+  _or: [event_bool_exp!]
+  description: String_comparison_exp
+  end: String_comparison_exp
+  id: uuid_comparison_exp
+  images: images_bool_exp
+  images_aggregate: images_aggregate_bool_exp
+  start: String_comparison_exp
+  title: String_comparison_exp
+  user_id: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "event"
+"""
+enum event_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  event_pkey
+}
+
+"""
+input type for inserting data into table "event"
+"""
+input event_insert_input {
+  description: String
+  end: String
+  id: uuid
+  images: images_arr_rel_insert_input
+  start: String
+  title: String
+  user_id: String
+}
+
+"""aggregate max on columns"""
+type event_max_fields {
+  description: String
+  end: String
+  id: uuid
+  start: String
+  title: String
+  user_id: String
+}
+
+"""aggregate min on columns"""
+type event_min_fields {
+  description: String
+  end: String
+  id: uuid
+  start: String
+  title: String
+  user_id: String
+}
+
+"""
+response of any mutation on the table "event"
+"""
+type event_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [event!]!
+}
+
+"""
+input type for inserting object relation for remote table "event"
+"""
+input event_obj_rel_insert_input {
+  data: event_insert_input!
+
+  """upsert condition"""
+  on_conflict: event_on_conflict
+}
+
+"""
+on_conflict condition type for table "event"
+"""
+input event_on_conflict {
+  constraint: event_constraint!
+  update_columns: [event_update_column!]! = []
+  where: event_bool_exp
+}
+
+"""Ordering options when selecting data from "event"."""
+input event_order_by {
+  description: order_by
+  end: order_by
+  id: order_by
+  images_aggregate: images_aggregate_order_by
+  start: order_by
+  title: order_by
+  user_id: order_by
+}
+
+"""primary key columns input for table: event"""
+input event_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "event"
+"""
+enum event_select_column {
+  """column name"""
+  description
+
+  """column name"""
+  end
+
+  """column name"""
+  id
+
+  """column name"""
+  start
+
+  """column name"""
+  title
+
+  """column name"""
+  user_id
+}
+
+"""
+input type for updating data in table "event"
+"""
+input event_set_input {
+  description: String
+  end: String
+  id: uuid
+  start: String
+  title: String
+  user_id: String
+}
+
+"""
+Streaming cursor of the table "event"
+"""
+input event_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: event_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input event_stream_cursor_value_input {
+  description: String
+  end: String
+  id: uuid
+  start: String
+  title: String
+  user_id: String
+}
+
+"""
+update columns of table "event"
+"""
+enum event_update_column {
+  """column name"""
+  description
+
+  """column name"""
+  end
+
+  """column name"""
+  id
+
+  """column name"""
+  start
+
+  """column name"""
+  title
+
+  """column name"""
+  user_id
+}
+
+input event_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: event_set_input
+
+  """filter the rows which have to be updated"""
+  where: event_bool_exp!
+}
+
+"""
+columns and relationships of "images"
+"""
+type images {
+  base_64: String!
+
+  """An object relationship"""
+  event: event!
+  event_id: uuid!
+  id: uuid!
+  recognized_text: String!
+  title: String!
+}
+
+"""
+aggregated selection of "images"
+"""
+type images_aggregate {
+  aggregate: images_aggregate_fields
+  nodes: [images!]!
+}
+
+input images_aggregate_bool_exp {
+  count: images_aggregate_bool_exp_count
+}
+
+input images_aggregate_bool_exp_count {
+  arguments: [images_select_column!]
+  distinct: Boolean
+  filter: images_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "images"
+"""
+type images_aggregate_fields {
+  count(columns: [images_select_column!], distinct: Boolean): Int!
+  max: images_max_fields
+  min: images_min_fields
+}
+
+"""
+order by aggregate values of table "images"
+"""
+input images_aggregate_order_by {
+  count: order_by
+  max: images_max_order_by
+  min: images_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "images"
+"""
+input images_arr_rel_insert_input {
+  data: [images_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: images_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "images". All fields are combined with a logical 'AND'.
+"""
+input images_bool_exp {
+  _and: [images_bool_exp!]
+  _not: images_bool_exp
+  _or: [images_bool_exp!]
+  base_64: String_comparison_exp
+  event: event_bool_exp
+  event_id: uuid_comparison_exp
+  id: uuid_comparison_exp
+  recognized_text: String_comparison_exp
+  title: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "images"
+"""
+enum images_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  images_pkey
+}
+
+"""
+input type for inserting data into table "images"
+"""
+input images_insert_input {
+  base_64: String
+  event: event_obj_rel_insert_input
+  event_id: uuid
+  id: uuid
+  recognized_text: String
+  title: String
+}
+
+"""aggregate max on columns"""
+type images_max_fields {
+  base_64: String
+  event_id: uuid
+  id: uuid
+  recognized_text: String
+  title: String
+}
+
+"""
+order by max() on columns of table "images"
+"""
+input images_max_order_by {
+  base_64: order_by
+  event_id: order_by
+  id: order_by
+  recognized_text: order_by
+  title: order_by
+}
+
+"""aggregate min on columns"""
+type images_min_fields {
+  base_64: String
+  event_id: uuid
+  id: uuid
+  recognized_text: String
+  title: String
+}
+
+"""
+order by min() on columns of table "images"
+"""
+input images_min_order_by {
+  base_64: order_by
+  event_id: order_by
+  id: order_by
+  recognized_text: order_by
+  title: order_by
+}
+
+"""
+response of any mutation on the table "images"
+"""
+type images_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [images!]!
+}
+
+"""
+on_conflict condition type for table "images"
+"""
+input images_on_conflict {
+  constraint: images_constraint!
+  update_columns: [images_update_column!]! = []
+  where: images_bool_exp
+}
+
+"""Ordering options when selecting data from "images"."""
+input images_order_by {
+  base_64: order_by
+  event: event_order_by
+  event_id: order_by
+  id: order_by
+  recognized_text: order_by
+  title: order_by
+}
+
+"""primary key columns input for table: images"""
+input images_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "images"
+"""
+enum images_select_column {
+  """column name"""
+  base_64
+
+  """column name"""
+  event_id
+
+  """column name"""
+  id
+
+  """column name"""
+  recognized_text
+
+  """column name"""
+  title
+}
+
+"""
+input type for updating data in table "images"
+"""
+input images_set_input {
+  base_64: String
+  event_id: uuid
+  id: uuid
+  recognized_text: String
+  title: String
+}
+
+"""
+Streaming cursor of the table "images"
+"""
+input images_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: images_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input images_stream_cursor_value_input {
+  base_64: String
+  event_id: uuid
+  id: uuid
+  recognized_text: String
+  title: String
+}
+
+"""
+update columns of table "images"
+"""
+enum images_update_column {
+  """column name"""
+  base_64
+
+  """column name"""
+  event_id
+
+  """column name"""
+  id
+
+  """column name"""
+  recognized_text
+
+  """column name"""
+  title
+}
+
+input images_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: images_set_input
+
+  """filter the rows which have to be updated"""
+  where: images_bool_exp!
+}
+
+scalar jsonb
+
+input jsonb_cast_exp {
+  String: String_comparison_exp
+}
+
+"""
+Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
+"""
+input jsonb_comparison_exp {
+  _cast: jsonb_cast_exp
+
+  """is the column contained in the given json value"""
+  _contained_in: jsonb
+
+  """does the column contain the given json value at the top level"""
+  _contains: jsonb
+  _eq: jsonb
+  _gt: jsonb
+  _gte: jsonb
+
+  """does the string exist as a top-level key in the column"""
+  _has_key: String
+
+  """do all of these strings exist as top-level keys in the column"""
+  _has_keys_all: [String!]
+
+  """do any of these strings exist as top-level keys in the column"""
+  _has_keys_any: [String!]
+  _in: [jsonb!]
+  _is_null: Boolean
+  _lt: jsonb
+  _lte: jsonb
+  _neq: jsonb
+  _nin: [jsonb!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "event"
+  """
+  delete_event(
+    """filter the rows which have to be deleted"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  delete single row from the table: "event"
+  """
+  delete_event_by_pk(id: uuid!): event
+
+  """
+  delete data from the table: "images"
+  """
+  delete_images(
+    """filter the rows which have to be deleted"""
+    where: images_bool_exp!
+  ): images_mutation_response
+
+  """
+  delete single row from the table: "images"
+  """
+  delete_images_by_pk(id: uuid!): images
+
+  """
+  delete data from the table: "notifications_sent"
+  """
+  delete_notifications_sent(
+    """filter the rows which have to be deleted"""
+    where: notifications_sent_bool_exp!
+  ): notifications_sent_mutation_response
+
+  """
+  delete single row from the table: "notifications_sent"
+  """
+  delete_notifications_sent_by_pk(event_id: uuid!, user_id: String!): notifications_sent
+
+  """
+  delete data from the table: "push_subscriptions"
+  """
+  delete_push_subscriptions(
+    """filter the rows which have to be deleted"""
+    where: push_subscriptions_bool_exp!
+  ): push_subscriptions_mutation_response
+
+  """
+  delete single row from the table: "push_subscriptions"
+  """
+  delete_push_subscriptions_by_pk(id: uuid!): push_subscriptions
+
+  """
+  insert data into the table: "event"
+  """
+  insert_event(
+    """the rows to be inserted"""
+    objects: [event_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: event_on_conflict
+  ): event_mutation_response
+
+  """
+  insert a single row into the table: "event"
+  """
+  insert_event_one(
+    """the row to be inserted"""
+    object: event_insert_input!
+
+    """upsert condition"""
+    on_conflict: event_on_conflict
+  ): event
+
+  """
+  insert data into the table: "images"
+  """
+  insert_images(
+    """the rows to be inserted"""
+    objects: [images_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: images_on_conflict
+  ): images_mutation_response
+
+  """
+  insert a single row into the table: "images"
+  """
+  insert_images_one(
+    """the row to be inserted"""
+    object: images_insert_input!
+
+    """upsert condition"""
+    on_conflict: images_on_conflict
+  ): images
+
+  """
+  insert data into the table: "notifications_sent"
+  """
+  insert_notifications_sent(
+    """the rows to be inserted"""
+    objects: [notifications_sent_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: notifications_sent_on_conflict
+  ): notifications_sent_mutation_response
+
+  """
+  insert a single row into the table: "notifications_sent"
+  """
+  insert_notifications_sent_one(
+    """the row to be inserted"""
+    object: notifications_sent_insert_input!
+
+    """upsert condition"""
+    on_conflict: notifications_sent_on_conflict
+  ): notifications_sent
+
+  """
+  insert data into the table: "push_subscriptions"
+  """
+  insert_push_subscriptions(
+    """the rows to be inserted"""
+    objects: [push_subscriptions_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: push_subscriptions_on_conflict
+  ): push_subscriptions_mutation_response
+
+  """
+  insert a single row into the table: "push_subscriptions"
+  """
+  insert_push_subscriptions_one(
+    """the row to be inserted"""
+    object: push_subscriptions_insert_input!
+
+    """upsert condition"""
+    on_conflict: push_subscriptions_on_conflict
+  ): push_subscriptions
+
+  """
+  update data of the table: "event"
+  """
+  update_event(
+    """sets the columns of the filtered rows to the given values"""
+    _set: event_set_input
+
+    """filter the rows which have to be updated"""
+    where: event_bool_exp!
+  ): event_mutation_response
+
+  """
+  update single row of the table: "event"
+  """
+  update_event_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: event_set_input
+    pk_columns: event_pk_columns_input!
+  ): event
+
+  """
+  update multiples rows of table: "event"
+  """
+  update_event_many(
+    """updates to execute, in order"""
+    updates: [event_updates!]!
+  ): [event_mutation_response]
+
+  """
+  update data of the table: "images"
+  """
+  update_images(
+    """sets the columns of the filtered rows to the given values"""
+    _set: images_set_input
+
+    """filter the rows which have to be updated"""
+    where: images_bool_exp!
+  ): images_mutation_response
+
+  """
+  update single row of the table: "images"
+  """
+  update_images_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: images_set_input
+    pk_columns: images_pk_columns_input!
+  ): images
+
+  """
+  update multiples rows of table: "images"
+  """
+  update_images_many(
+    """updates to execute, in order"""
+    updates: [images_updates!]!
+  ): [images_mutation_response]
+
+  """
+  update data of the table: "notifications_sent"
+  """
+  update_notifications_sent(
+    """sets the columns of the filtered rows to the given values"""
+    _set: notifications_sent_set_input
+
+    """filter the rows which have to be updated"""
+    where: notifications_sent_bool_exp!
+  ): notifications_sent_mutation_response
+
+  """
+  update single row of the table: "notifications_sent"
+  """
+  update_notifications_sent_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: notifications_sent_set_input
+    pk_columns: notifications_sent_pk_columns_input!
+  ): notifications_sent
+
+  """
+  update multiples rows of table: "notifications_sent"
+  """
+  update_notifications_sent_many(
+    """updates to execute, in order"""
+    updates: [notifications_sent_updates!]!
+  ): [notifications_sent_mutation_response]
+
+  """
+  update data of the table: "push_subscriptions"
+  """
+  update_push_subscriptions(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: push_subscriptions_append_input
+
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _delete_at_path: push_subscriptions_delete_at_path_input
+
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _delete_elem: push_subscriptions_delete_elem_input
+
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _delete_key: push_subscriptions_delete_key_input
+
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: push_subscriptions_prepend_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: push_subscriptions_set_input
+
+    """filter the rows which have to be updated"""
+    where: push_subscriptions_bool_exp!
+  ): push_subscriptions_mutation_response
+
+  """
+  update single row of the table: "push_subscriptions"
+  """
+  update_push_subscriptions_by_pk(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: push_subscriptions_append_input
+
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _delete_at_path: push_subscriptions_delete_at_path_input
+
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _delete_elem: push_subscriptions_delete_elem_input
+
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _delete_key: push_subscriptions_delete_key_input
+
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: push_subscriptions_prepend_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: push_subscriptions_set_input
+    pk_columns: push_subscriptions_pk_columns_input!
+  ): push_subscriptions
+
+  """
+  update multiples rows of table: "push_subscriptions"
+  """
+  update_push_subscriptions_many(
+    """updates to execute, in order"""
+    updates: [push_subscriptions_updates!]!
+  ): [push_subscriptions_mutation_response]
+}
+
+"""
+columns and relationships of "notifications_sent"
+"""
+type notifications_sent {
+  event_id: uuid!
+  sent_at: timestamptz!
+  user_id: String!
+}
+
+"""
+aggregated selection of "notifications_sent"
+"""
+type notifications_sent_aggregate {
+  aggregate: notifications_sent_aggregate_fields
+  nodes: [notifications_sent!]!
+}
+
+"""
+aggregate fields of "notifications_sent"
+"""
+type notifications_sent_aggregate_fields {
+  count(columns: [notifications_sent_select_column!], distinct: Boolean): Int!
+  max: notifications_sent_max_fields
+  min: notifications_sent_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "notifications_sent". All fields are combined with a logical 'AND'.
+"""
+input notifications_sent_bool_exp {
+  _and: [notifications_sent_bool_exp!]
+  _not: notifications_sent_bool_exp
+  _or: [notifications_sent_bool_exp!]
+  event_id: uuid_comparison_exp
+  sent_at: timestamptz_comparison_exp
+  user_id: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "notifications_sent"
+"""
+enum notifications_sent_constraint {
+  """
+  unique or primary key constraint on columns "user_id", "event_id"
+  """
+  notifications_sent_pkey
+}
+
+"""
+input type for inserting data into table "notifications_sent"
+"""
+input notifications_sent_insert_input {
+  event_id: uuid
+  sent_at: timestamptz
+  user_id: String
+}
+
+"""aggregate max on columns"""
+type notifications_sent_max_fields {
+  event_id: uuid
+  sent_at: timestamptz
+  user_id: String
+}
+
+"""aggregate min on columns"""
+type notifications_sent_min_fields {
+  event_id: uuid
+  sent_at: timestamptz
+  user_id: String
+}
+
+"""
+response of any mutation on the table "notifications_sent"
+"""
+type notifications_sent_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [notifications_sent!]!
+}
+
+"""
+on_conflict condition type for table "notifications_sent"
+"""
+input notifications_sent_on_conflict {
+  constraint: notifications_sent_constraint!
+  update_columns: [notifications_sent_update_column!]! = []
+  where: notifications_sent_bool_exp
+}
+
+"""Ordering options when selecting data from "notifications_sent"."""
+input notifications_sent_order_by {
+  event_id: order_by
+  sent_at: order_by
+  user_id: order_by
+}
+
+"""primary key columns input for table: notifications_sent"""
+input notifications_sent_pk_columns_input {
+  event_id: uuid!
+  user_id: String!
+}
+
+"""
+select columns of table "notifications_sent"
+"""
+enum notifications_sent_select_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  sent_at
+
+  """column name"""
+  user_id
+}
+
+"""
+input type for updating data in table "notifications_sent"
+"""
+input notifications_sent_set_input {
+  event_id: uuid
+  sent_at: timestamptz
+  user_id: String
+}
+
+"""
+Streaming cursor of the table "notifications_sent"
+"""
+input notifications_sent_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: notifications_sent_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input notifications_sent_stream_cursor_value_input {
+  event_id: uuid
+  sent_at: timestamptz
+  user_id: String
+}
+
+"""
+update columns of table "notifications_sent"
+"""
+enum notifications_sent_update_column {
+  """column name"""
+  event_id
+
+  """column name"""
+  sent_at
+
+  """column name"""
+  user_id
+}
+
+input notifications_sent_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: notifications_sent_set_input
+
+  """filter the rows which have to be updated"""
+  where: notifications_sent_bool_exp!
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "push_subscriptions"
+"""
+type push_subscriptions {
+  created_at: timestamptz!
+  id: uuid!
+  subscription(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  updated_at: timestamptz!
+  user_id: String!
+}
+
+"""
+aggregated selection of "push_subscriptions"
+"""
+type push_subscriptions_aggregate {
+  aggregate: push_subscriptions_aggregate_fields
+  nodes: [push_subscriptions!]!
+}
+
+"""
+aggregate fields of "push_subscriptions"
+"""
+type push_subscriptions_aggregate_fields {
+  count(columns: [push_subscriptions_select_column!], distinct: Boolean): Int!
+  max: push_subscriptions_max_fields
+  min: push_subscriptions_min_fields
+}
+
+"""append existing jsonb value of filtered columns with new jsonb value"""
+input push_subscriptions_append_input {
+  subscription: jsonb
+}
+
+"""
+Boolean expression to filter rows from the table "push_subscriptions". All fields are combined with a logical 'AND'.
+"""
+input push_subscriptions_bool_exp {
+  _and: [push_subscriptions_bool_exp!]
+  _not: push_subscriptions_bool_exp
+  _or: [push_subscriptions_bool_exp!]
+  created_at: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  subscription: jsonb_comparison_exp
+  updated_at: timestamptz_comparison_exp
+  user_id: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "push_subscriptions"
+"""
+enum push_subscriptions_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  push_subscriptions_pkey
+
+  """
+  unique or primary key constraint on columns "user_id"
+  """
+  push_subscriptions_user_id_key
+}
+
+"""
+delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+"""
+input push_subscriptions_delete_at_path_input {
+  subscription: [String!]
+}
+
+"""
+delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+"""
+input push_subscriptions_delete_elem_input {
+  subscription: Int
+}
+
+"""
+delete key/value pair or string element. key/value pairs are matched based on their key value
+"""
+input push_subscriptions_delete_key_input {
+  subscription: String
+}
+
+"""
+input type for inserting data into table "push_subscriptions"
+"""
+input push_subscriptions_insert_input {
+  created_at: timestamptz
+  id: uuid
+  subscription: jsonb
+  updated_at: timestamptz
+  user_id: String
+}
+
+"""aggregate max on columns"""
+type push_subscriptions_max_fields {
+  created_at: timestamptz
+  id: uuid
+  updated_at: timestamptz
+  user_id: String
+}
+
+"""aggregate min on columns"""
+type push_subscriptions_min_fields {
+  created_at: timestamptz
+  id: uuid
+  updated_at: timestamptz
+  user_id: String
+}
+
+"""
+response of any mutation on the table "push_subscriptions"
+"""
+type push_subscriptions_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [push_subscriptions!]!
+}
+
+"""
+on_conflict condition type for table "push_subscriptions"
+"""
+input push_subscriptions_on_conflict {
+  constraint: push_subscriptions_constraint!
+  update_columns: [push_subscriptions_update_column!]! = []
+  where: push_subscriptions_bool_exp
+}
+
+"""Ordering options when selecting data from "push_subscriptions"."""
+input push_subscriptions_order_by {
+  created_at: order_by
+  id: order_by
+  subscription: order_by
+  updated_at: order_by
+  user_id: order_by
+}
+
+"""primary key columns input for table: push_subscriptions"""
+input push_subscriptions_pk_columns_input {
+  id: uuid!
+}
+
+"""prepend existing jsonb value of filtered columns with new jsonb value"""
+input push_subscriptions_prepend_input {
+  subscription: jsonb
+}
+
+"""
+select columns of table "push_subscriptions"
+"""
+enum push_subscriptions_select_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  subscription
+
+  """column name"""
+  updated_at
+
+  """column name"""
+  user_id
+}
+
+"""
+input type for updating data in table "push_subscriptions"
+"""
+input push_subscriptions_set_input {
+  created_at: timestamptz
+  id: uuid
+  subscription: jsonb
+  updated_at: timestamptz
+  user_id: String
+}
+
+"""
+Streaming cursor of the table "push_subscriptions"
+"""
+input push_subscriptions_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: push_subscriptions_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input push_subscriptions_stream_cursor_value_input {
+  created_at: timestamptz
+  id: uuid
+  subscription: jsonb
+  updated_at: timestamptz
+  user_id: String
+}
+
+"""
+update columns of table "push_subscriptions"
+"""
+enum push_subscriptions_update_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  subscription
+
+  """column name"""
+  updated_at
+
+  """column name"""
+  user_id
+}
+
+input push_subscriptions_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: push_subscriptions_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: push_subscriptions_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: push_subscriptions_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: push_subscriptions_delete_key_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: push_subscriptions_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: push_subscriptions_set_input
+
+  """filter the rows which have to be updated"""
+  where: push_subscriptions_bool_exp!
+}
+
+type query_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """fetch data from the table: "event" using primary key columns"""
+  event_by_pk(id: uuid!): event
+
+  """An array relationship"""
+  images(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): [images!]!
+
+  """An aggregate relationship"""
+  images_aggregate(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): images_aggregate!
+
+  """fetch data from the table: "images" using primary key columns"""
+  images_by_pk(id: uuid!): images
+
+  """
+  fetch data from the table: "notifications_sent"
+  """
+  notifications_sent(
+    """distinct select on columns"""
+    distinct_on: [notifications_sent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_sent_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_sent_bool_exp
+  ): [notifications_sent!]!
+
+  """
+  fetch aggregated fields from the table: "notifications_sent"
+  """
+  notifications_sent_aggregate(
+    """distinct select on columns"""
+    distinct_on: [notifications_sent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_sent_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_sent_bool_exp
+  ): notifications_sent_aggregate!
+
+  """
+  fetch data from the table: "notifications_sent" using primary key columns
+  """
+  notifications_sent_by_pk(event_id: uuid!, user_id: String!): notifications_sent
+
+  """
+  fetch data from the table: "push_subscriptions"
+  """
+  push_subscriptions(
+    """distinct select on columns"""
+    distinct_on: [push_subscriptions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [push_subscriptions_order_by!]
+
+    """filter the rows returned"""
+    where: push_subscriptions_bool_exp
+  ): [push_subscriptions!]!
+
+  """
+  fetch aggregated fields from the table: "push_subscriptions"
+  """
+  push_subscriptions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [push_subscriptions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [push_subscriptions_order_by!]
+
+    """filter the rows returned"""
+    where: push_subscriptions_bool_exp
+  ): push_subscriptions_aggregate!
+
+  """
+  fetch data from the table: "push_subscriptions" using primary key columns
+  """
+  push_subscriptions_by_pk(id: uuid!): push_subscriptions
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch aggregated fields from the table: "event"
+  """
+  event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): event_aggregate!
+
+  """fetch data from the table: "event" using primary key columns"""
+  event_by_pk(id: uuid!): event
+
+  """
+  fetch data from the table in a streaming manner: "event"
+  """
+  event_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [event_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """An array relationship"""
+  images(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): [images!]!
+
+  """An aggregate relationship"""
+  images_aggregate(
+    """distinct select on columns"""
+    distinct_on: [images_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [images_order_by!]
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): images_aggregate!
+
+  """fetch data from the table: "images" using primary key columns"""
+  images_by_pk(id: uuid!): images
+
+  """
+  fetch data from the table in a streaming manner: "images"
+  """
+  images_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [images_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: images_bool_exp
+  ): [images!]!
+
+  """
+  fetch data from the table: "notifications_sent"
+  """
+  notifications_sent(
+    """distinct select on columns"""
+    distinct_on: [notifications_sent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_sent_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_sent_bool_exp
+  ): [notifications_sent!]!
+
+  """
+  fetch aggregated fields from the table: "notifications_sent"
+  """
+  notifications_sent_aggregate(
+    """distinct select on columns"""
+    distinct_on: [notifications_sent_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_sent_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_sent_bool_exp
+  ): notifications_sent_aggregate!
+
+  """
+  fetch data from the table: "notifications_sent" using primary key columns
+  """
+  notifications_sent_by_pk(event_id: uuid!, user_id: String!): notifications_sent
+
+  """
+  fetch data from the table in a streaming manner: "notifications_sent"
+  """
+  notifications_sent_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [notifications_sent_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: notifications_sent_bool_exp
+  ): [notifications_sent!]!
+
+  """
+  fetch data from the table: "push_subscriptions"
+  """
+  push_subscriptions(
+    """distinct select on columns"""
+    distinct_on: [push_subscriptions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [push_subscriptions_order_by!]
+
+    """filter the rows returned"""
+    where: push_subscriptions_bool_exp
+  ): [push_subscriptions!]!
+
+  """
+  fetch aggregated fields from the table: "push_subscriptions"
+  """
+  push_subscriptions_aggregate(
+    """distinct select on columns"""
+    distinct_on: [push_subscriptions_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [push_subscriptions_order_by!]
+
+    """filter the rows returned"""
+    where: push_subscriptions_bool_exp
+  ): push_subscriptions_aggregate!
+
+  """
+  fetch data from the table: "push_subscriptions" using primary key columns
+  """
+  push_subscriptions_by_pk(id: uuid!): push_subscriptions
+
+  """
+  fetch data from the table in a streaming manner: "push_subscriptions"
+  """
+  push_subscriptions_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [push_subscriptions_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: push_subscriptions_bool_exp
+  ): [push_subscriptions!]!
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}

@@ -4,17 +4,23 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "npx ts-node ./src/server.ts"
+        "build": "npx ts-node ./src/server.ts",
+        "gen": "gql.tada generate schema 'https://modern-scheduler-2.hasura.app/v1/graphql' -o ./generated/db.graphql --header \"x-hasura-admin-secret: 15XDSkPMZOqf6OjUlNm8TmCgMxprpqOjGE3AByfRNyPU00D6vczNIEPXa9uEFr09\" && gql-tada generate output"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "description": "",
     "dependencies": {
+        "@urql/core": "^5.1.1",
         "body-parser": "^2.2.0",
         "cors": "^2.8.5",
+        "date-fns": "^4.1.0",
         "dotenv": "^16.5.0",
         "express": "^5.1.0",
+        "gql.tada": "^1.8.10",
+        "node-cron": "^4.0.7",
+        "node-fetch": "^3.3.2",
         "web-push": "^3.6.7"
     },
     "devDependencies": {

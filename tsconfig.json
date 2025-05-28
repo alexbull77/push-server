@@ -6,6 +6,19 @@
         "outDir": "./dist",
         "esModuleInterop": true,
         "strict": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "plugins": [
+            {
+                "name": "gql.tada/ts-plugin",
+                "schemas": [
+                    {
+                        "name": "db",
+                        "schema": "./generated/db.graphql",
+                        "tadaOutputLocation": "./generated/db-graphql-env.d.ts",
+                        "noIntrospection": true
+                    },
+                ]
+            }
+        ]
     }
 }
