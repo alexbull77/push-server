@@ -1,0 +1,29 @@
+{
+    "name": "push-server",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npx ts-node ./src/server.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "body-parser": "^2.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "web-push": "^3.6.7"
+    },
+    "devDependencies": {
+        "@types/body-parser": "^1.19.5",
+        "@types/cors": "^2.8.18",
+        "@types/express": "^5.0.2",
+        "@types/node": "^22.15.24",
+        "@types/web-push": "^3.6.4",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
+}

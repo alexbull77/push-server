@@ -1,0 +1,49 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite cache
+.vite/
+
+# VSCode settings
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Optional: TypeScript cache files
+*.tsbuildinfo
+
+# Optional: local IDE/editor config files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional: Debugger config files
+.vscode/
+*.code-workspace
+
+# Optional: test coverage output
+coverage/
+
+# Optional: yarn lock files if you use pnpm (you probably don't want these ignored)
+# yarn.lock
+
+# Optional: misc
+*.log
