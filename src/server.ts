@@ -100,7 +100,7 @@ app.listen(PORT, () => {
   console.log(`Server running on ${BACKEND_BASE_URL}`);
 });
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
   console.log("🔔 Running push reminder task...");
 
   try {
