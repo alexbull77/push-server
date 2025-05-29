@@ -1,5 +1,9 @@
 import { getClient, graphql } from "./client";
-import { differenceInMinutes, parse } from "date-fns";
+import { differenceInMinutes } from "date-fns";
+import { parse } from "date-fns";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
+
+const MOLDOVA_TIMEZONE = "Europe/Chisinau";
 
 const fetchEventsQuery = graphql(`
   query fetchEvents($user_id: String) {
@@ -20,8 +24,11 @@ const fetchSentNotifications = graphql(`
 `);
 
 export const fetchNextEventToNotify = async (user_id: string) => {
-  const now = new Date();
   const client = await getClient();
+
+  // Convert server's current UTC time to Moldova time
+  const nowUtc = new Date();
+  const nowInMoldova = toZonedTime(nowUtc, MOLDOVA_TIMEZONE);
 
   const [eventsRes, sentRes] = await Promise.all([
     client.query(fetchEventsQuery, { user_id }),
@@ -33,15 +40,21 @@ export const fetchNextEventToNotify = async (user_id: string) => {
   );
 
   const eventToNotify = (eventsRes.data?.event || []).find((event) => {
-    const parsed = parse(event.start, "yyyy-MM-dd HH:mm", now);
-    const minutes = differenceInMinutes(parsed, now);
+    // Parse event time as Moldova local time
+    const parsed = parse(event.start, "yyyy-MM-dd HH:mm", nowInMoldova);
+    const eventTimeUtc = fromZonedTime(parsed, MOLDOVA_TIMEZONE);
+    const minutes = differenceInMinutes(eventTimeUtc, nowUtc);
+
     return !sentEventIds.has(event.id) && minutes >= 10 && minutes <= 20;
   });
 
   return eventToNotify
     ? {
         ...eventToNotify,
-        parsedStart: parse(eventToNotify.start, "yyyy-MM-dd HH:mm", now),
+        parsedStart: fromZonedTime(
+          parse(eventToNotify.start, "yyyy-MM-dd HH:mm", nowInMoldova),
+          MOLDOVA_TIMEZONE
+        ),
       }
     : null;
 };
