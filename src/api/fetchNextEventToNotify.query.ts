@@ -35,6 +35,8 @@ export const fetchNextEventToNotify = async (user_id: string) => {
     client.query(fetchSentNotifications, { user_id }),
   ]);
 
+  console.log("eventsRes", eventsRes);
+
   const sentEventIds = new Set(
     sentRes.data?.notifications_sent.map((n) => n.event_id)
   );
@@ -45,8 +47,12 @@ export const fetchNextEventToNotify = async (user_id: string) => {
     const eventTimeUtc = fromZonedTime(parsed, MOLDOVA_TIMEZONE);
     const minutes = differenceInMinutes(eventTimeUtc, nowUtc);
 
+    console.log(parsed, eventTimeUtc, minutes);
+
     return !sentEventIds.has(event.id) && minutes >= 10 && minutes <= 20;
   });
+
+  console.log("eventToNotify", eventToNotify);
 
   return eventToNotify
     ? {
